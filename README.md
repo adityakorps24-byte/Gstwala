@@ -2,21 +2,49 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### 1) Install dependencies
+
+```bash
+npm install
+```
+
+### 2) Add your OpenAI API key
+
+Create a file named `.env.local` in the project root (same folder as `package.json`) and add:
+
+```bash
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
+```
+
+`OPENAI_MODEL` is optional.
+
+### 3) Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What this app does
+
+"GST WALA (India)" is a single-page app where you enter GST notice details and get:
+
+- Simple explanation (Hindi + English)
+- Professional reply draft (subject / reference / body / closing)
+- Suggested document checklist
+
+## Notes
+
+- No login/signup
+- No OTP
+- No database
+
+## API
+
+- Frontend calls `POST /api/generate`
+- Server reads `OPENAI_API_KEY` from `.env.local`
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
