@@ -22,6 +22,7 @@ export default function Home() {
   const [noticeType, setNoticeType] = useState<NoticeType>(
     "GSTR-3B vs GSTR-1 mismatch",
   );
+  const [email, setEmail] = useState("");
   const [noticeContent, setNoticeContent] = useState("");
   const [userExplanation, setUserExplanation] = useState("");
 
@@ -67,6 +68,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           noticeType,
+          email,
           noticeContent,
           userExplanation,
         }),
@@ -126,6 +128,21 @@ export default function Home() {
                 <option value="Late filing notice">Late filing notice</option>
                 <option value="ITC mismatch">ITC mismatch</option>
               </select>
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="email">
+                Email (optional)
+              </label>
+              <input
+                id="email"
+                className={styles.input}
+                type="email"
+                placeholder="name@business.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+              />
             </div>
 
             <div className={styles.field}>

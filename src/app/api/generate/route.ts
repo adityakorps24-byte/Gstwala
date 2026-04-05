@@ -7,6 +7,7 @@ type NoticeType =
 
 type GenerateRequestBody = {
   noticeType: NoticeType;
+  email?: string;
   noticeContent: string;
   userExplanation: string;
 };
@@ -18,6 +19,10 @@ type GenerateResponse = {
 };
 
 function buildPrompt(input: GenerateRequestBody) {
+  const emailLine = input.email && input.email.trim().length > 0
+    ? `\n\nTheir email (optional):\n${input.email.trim()}`
+    : "";
+
   return `You are a GST expert in India.
 
 A small business owner received this GST notice:
@@ -28,12 +33,15 @@ ${input.noticeType}
 
 Their explanation:
 ${input.userExplanation}
+${emailLine}
 
 Tasks:
 1. Explain the notice in very simple Hindi and English.
 2. Draft a professional reply addressed to the GST officer.
 3. Keep proper format: subject, reference, body, closing.
 4. Suggest a checklist of documents to attach.
+
+If an email is provided, include it appropriately in the closing/signature (as contact detail). Do not invent phone numbers or addresses.
 
 Keep it practical, legally safe, and easy to understand.
 
@@ -67,12 +75,21 @@ function validateBody(body: unknown): GenerateRequestBody {
     throw new Error("Notice content is required.");
   }
 
+  if (typeof b.email === "string" && b.email.trim().length > 0) {
+    const email = b.email.trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailOk) {
+      throw new Error("Invalid email.");
+    }
+  }
+
   if (!b.userExplanation || typeof b.userExplanation !== "string") {
     throw new Error("User explanation is required.");
   }
 
   return {
     noticeType: b.noticeType as NoticeType,
+    email: typeof b.email === "string" ? b.email : undefined,
     noticeContent: b.noticeContent,
     userExplanation: b.userExplanation,
   };
